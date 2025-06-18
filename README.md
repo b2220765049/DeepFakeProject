@@ -50,7 +50,7 @@ Ensure your datasets are structured appropriately for the `FDataset`, `FDataset_
 
 1.  **Clone the repository:**
     ```bash
-    git clone github.com/b2220765049/DeepFakeProject
+    git clone git clone https://github.com/b2220765049/DeepFakeProject.git
     cd DeepFakeProject
     ```
 
