@@ -1,166 +1,148 @@
-Of course. A good `README.md` is essential for any project. Based on all the information you've provided, here is a comprehensive `README.md` file for your GitHub repository.
+# Advanced DeepFake Detection Research Toolkit
 
-You can copy and paste the content below directly into a `README.md` file in your project's root directory.
+This project is a collection of scripts and models for research and experimentation in DeepFake detection. It implements various deep learning architectures, training pipelines, evaluation methodologies, and custom approaches for identifying manipulated images and videos.
 
----
+## Overview
 
-# DeepFake Detection: A Comparative Analysis of Deep Learning Models
+The toolkit focuses on exploring diverse techniques for DeepFake detection, including:
+*   **State-of-the-Art Models:** Leveraging architectures like Xception, ResNet3D (Slow R50), Swin Transformer, Vision Transformer (ViT), and ConvNeXt.
+*   **Custom Model Enhancements:** Implementing modifications such as frequency domain analysis with Swin Transformers, MixStyle for domain generalization, and Deep Residual Feature Mining (DRFM).
+*   **Temporal Analysis:** Utilizing 3D convolutional networks and transformers for video-based detection.
+*   **Ensemble Methods:** Combining predictions from multiple models to improve robustness.
+*   **Novel Detection Approaches:** Includes a custom detector (`dene.py`) based on DenseNet features, Stockwell transform, wavelet analysis, and SVM classification.
+*   **Dataset Support:** Scripts are designed to work with common DeepFake datasets like FaceForensics++ (FF++) and CelebDF.
+*   **Comprehensive Evaluation:** Includes scripts for detailed performance analysis, ROC AUC calculation, confusion matrices, and model comparison.
+*   **Interactive Demos:** Streamlit applications for easy testing and visualization of detection results.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+## Features
 
-This repository contains the code and research for the "DeepFake Detection" project, part of the BBM479 Design Project at Hacettepe University. The primary goal of this research is to systematically evaluate and compare the performance of various state-of-the-art deep learning architectures for detecting deepfake videos.
-
-## Table of Contents
-- [Project Overview](#project-overview)
-- [Key Findings](#key-findings)
-- [Models Evaluated](#models-evaluated)
-- [Datasets](#datasets)
-- [Setup and Installation](#setup-and-installation)
-- [Usage](#usage)
-  - [Training a Model](#training-a-model)
-  - [Testing a Model](#testing-a-model)
-- [Results](#results)
-- [Future Work](#future-work)
-- [Contributing](#contributing)
-- [License](#license)
-
-## Project Overview
-
-Deepfake technology poses a significant threat to the integrity of digital media. This project tackles the challenge by providing a comprehensive comparison of different model architectures, including standard 2D CNNs, 3D CNNs for temporal analysis, and modern Vision Transformers. We analyze their performance, robustness to perturbations, and ability to generalize to unseen datasets.
-
-## Key Findings
-
-*   **Transformer Architectures Excel:** Vision Transformer-based models like Swin-S and ViT-16 generally outperformed traditional CNNs, especially in cross-dataset evaluations.
-*   **Frame Count is Critical:** Increasing the number of frames per video from 5 to 30 was the most significant factor in boosting model accuracy.
-*   **Cross-Dataset Performance Drop:** All models showed a notable decrease in performance on unseen datasets (Celeb-DF), highlighting a significant generalization challenge.
-*   **Vulnerability to Perturbations:** The models lacked robustness against common data perturbations like blur, noise, and compression artifacts.
-*   **Limited Data Augmentation:** The minimal use of augmentation, while boosting metrics on the test set, likely contributed to overfitting and poor resilience against perturbations.
-
-## Models Evaluated
-
-We implemented and tested a wide range of models to compare their effectiveness:
-
-*   **2D CNNs:**
+*   **Multiple Model Architectures:**
     *   XceptionNet
-    *   EfficientNet
-    *   ResNet50
-    *   ConvNeXt-S
-*   **3D CNNs (Temporal Models):**
-    *   Slow-ResNet
-    *   r3d_18
-    *   Custom 3D ResNet
-*   **Transformer-based Models:**
-    *   ViT-16 (Vision Transformer)
-    *   Swin-S (Swin Transformer)
+    *   ResNet3D (Slow R50)
+    *   Swin Transformer (Base, with Frequency analysis, MixStyle, DRFM)
+    *   Vision Transformer (ViT)
+    *   ConvNeXt
+    *   Custom Xception + Transformer
+    *   Custom ResNet3D + Transformer
+    *   Ensemble models
+    *   Custom Pairwise Interaction Model (from `paper_train.py`)
+    *   DenseNet + Stockwell Transform + Wavelet + SVM (`dene.py`)
+*   **Training Scripts:** Dedicated scripts for training various models (e.g., `train.py`, `3d_train.py`, `swin_temporal.py`, `vmamba_train.py` (likely ViT), `transformer_train.py`).
+*   **Evaluation Scripts:** Scripts for testing model performance on different datasets (e.g., `test.py`, `3d_test.py`, `last_eval.py`, `multi_test.py`).
+*   **Dataset Utilities:** Helper scripts (`utils.py`, `celeb_utils.py`) for loading and preprocessing FF++ and CelebDF datasets.
+*   **Data Augmentation & Perturbation:**
+    *   Standard augmentations (RandomHorizontalFlip, GaussianNoise, RandomErasing).
+    *   Analysis of model robustness against perturbations like downsampling/upsampling, blur, sharpen, salt & pepper noise (`test_all_models.py`, `transformations_visalize_delete.py`).
+*   **Streamlit Applications:**
+    *   `dene2.py`: Interactive demo for the custom DenseNet-based detector.
+    *   `final_test2.py`: Interactive demo for a Swin Transformer based detector with face extraction.
+*   **Model Comparison:** Scripts like `dene_comparison.py` and `test_all_models.py` for comparing the performance of different models.
 
 ## Datasets
 
-This project primarily uses the following publicly available datasets:
+The scripts are primarily designed to work with:
+*   **FaceForensics++ (FF++)**: A large-scale dataset for DeepFake detection.
+*   **CelebDF**: A challenging dataset with high-quality DeepFake videos.
 
-1.  **[FaceForensics++ (FF++)](https://github.com/ondyari/FaceForensics)**: Used for training and initial testing. It includes original videos and manipulated videos created with four different deepfake methods.
-2.  **[Celeb-DF (v2)](https://github.com/yuezunli/celeb-deepfakeforensics)**: Used for cross-dataset evaluation to test the models' generalization capabilities on unseen data.
+Ensure your datasets are structured appropriately for the `FDataset`, `FDataset_extended`, `celebDataset`, and `celeb_Dataset3D` classes in `utils.py` and `celeb_utils.py`. This typically involves organizing real and fake videos/images into respective directories and using JSON files (from `splits/`) to define train/validation/test splits.
 
-Please download the datasets from their official sources and organize them as described in the setup section.
-
-## Setup and Installation
+## Setup
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/your-repo-name.git
-    cd your-repo-name
+    git clone <your-repository-url>
+    cd <your-repository-name>
     ```
 
-2.  **Create a Python virtual environment (recommended):**
+2.  **Create a Python environment:**
+    It's recommended to use a virtual environment (e.g., conda or venv).
     ```bash
     python -m venv venv
-    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+    source venv/bin/activate  # On Windows: venv\Scripts\activate
     ```
 
-3.  **Install the required packages:**
-    *You should create a `requirements.txt` file listing all necessary libraries (e.g., PyTorch, torchvision, OpenCV, scikit-learn, etc.).*
+3.  **Install dependencies:**
+    You will need to install PyTorch, torchvision, timm, scikit-learn, OpenCV, dlib, Streamlit, Matplotlib, Seaborn, PyWavelets, and NumPy.
     ```bash
-    pip install -r requirements.txt
+    pip install torch torchvision torchaudio
+    pip install timm scikit-learn opencv-python dlib streamlit matplotlib seaborn pywavelets numpy tqdm
     ```
+    *Note: For dlib, you might need to install CMake and a C++ compiler first. Refer to dlib installation guides for your OS.*
+    *Note: Ensure PyTorch is installed with CUDA support if you have a compatible NVIDIA GPU.*
 
-4.  **Organize Datasets:**
-    Create a `datasets/` directory in the project root and place the datasets inside, following a structure that your data loader scripts expect. For example:
-    ```
-    datasets/
-    ├── faceforensics/
-    │   ├── original_sequences/
-    │   └── manipulated_sequences/
-    └── celeb-df/
-        ├── Celeb-real/
-        └── Celeb-synthesis/
-    ```
+4.  **Download Pretrained Models/Landmark Predictors:**
+    *   Some scripts might require pretrained model weights (e.g., `shape_predictor_81_face_landmarks.dat` for dlib, or specific model checkpoints). Place these in the expected directories (e.g., a `models/` folder or as specified in the scripts).
+    *   The `timm` library and `torch.hub` will automatically download pretrained weights for backbone models if `pretrained=True` is used and weights are not found locally.
+
+5.  **Prepare Datasets:**
+    *   Download FF++ and CelebDF datasets.
+    *   Preprocess them (e.g., extract frames from videos, crop faces) as required by the dataset loader classes.
+    *   Place them in a `dataset/` directory (e.g., `dataset/f++`, `dataset/celeb_test`).
+    *   Ensure the `splits/` directory contains the JSON files defining train/validation/test splits.
 
 ## Usage
 
-We provide simple scripts to train new models and test existing ones.
+### Training Models
 
-### Training a Model
-
-Use the `train.py` script to train a model. You can specify the model architecture, dataset path, and other hyperparameters.
-
-**Example:**
+Most training scripts can be run directly. For example:
 ```bash
-python train.py \
-    --model xception \
-    --dataset_path ./datasets/faceforensics/ \
-    --frames 30 \
-    --epochs 20 \
-    --batch_size 32 \
-    --learning_rate 0.001 \
-    --save_path ./checkpoints/
+python train.py  # Example for XceptionNet on FF++
+python 3d_train.py # Example for Slow R50 on FF++
+python swin_temporal.py # Example for Swin Transformer
+# ... and so on for other training scripts.
+```
+*   Modify parameters like `num_epochs`, `batch_size`, `learning_rate`, `output_folder`, and dataset paths directly within the scripts.
+*   Trained model checkpoints will typically be saved in the specified `output_folder`.
+
+### Evaluating Models
+
+Evaluation scripts load trained checkpoints and test them on specified datasets.
+```bash
+python test.py  # Example for testing a trained XceptionNet
+python 3d_test.py # Example for testing a trained Slow R50
+python last_eval.py # Example for ViT evaluation
+# ... and so on for other testing scripts.
+```
+*   Update `model_checkpoint` and `data_dir` paths in the test scripts.
+*   Results often include accuracy, ROC AUC, and sometimes confusion matrices.
+
+### Running Streamlit Demos
+
+To run the interactive demos:
+```bash
+streamlit run dene2.py  # For the custom DenseNet-based detector
+streamlit run final_test2.py # For the Swin Transformer based detector
+```
+These applications usually require you to upload a video file for analysis. Ensure the necessary model checkpoints (`.pkl` or `.pth`) are available in the paths specified within these Streamlit scripts.
+
+### Model Comparison
+
+```bash
+python dene_comparison.py # Compares 'dene' model with Xception, ResNet, Transformer
+python test_all_models.py # Evaluates multiple models against various image perturbations
 ```
 
-### Testing a Model
+## Key Scripts
 
-Use the `test.py` script to evaluate a trained model on a test set. You must provide the path to the saved model weights.
+*   **`utils.py`, `celeb_utils.py`**: Core dataset loading classes (FDataset, celebDataset, FDataset3D, etc.) and utility functions like `AddGaussianNoise`.
+*   **`train.py` / `train_with_celeb.py`**: General training script, often used for 2D CNNs like Xception, training on FF++ and evaluating/testing on CelebDF.
+*   **`test.py`**: General testing script for 2D CNNs.
+*   **`3d_train.py`, `3d_test.py`**: Training and testing scripts for 3D CNNs (e.g., Slow R50).
+*   **`swin_*.py` files (`swin_temporal.py`, `swin_frequency.py`, `swin_mix_style.py`, `swin_plus_train.py`):** Scripts for training Swin Transformer models with various modifications (temporal, frequency domain input, MixStyle augmentation, DRFM module).
+*   **`transformer_train.py`, `transformer_test.py`**: Training and testing for ResNet3D + Transformer architecture.
+*   **`transformer_xception_train.py`, `transformer_xception_test.py`**: Training and testing for Xception + Transformer architecture.
+*   **`vmamba_train.py` (likely ViT/Vision Mamba related), `last_eval.py`**: Training and evaluation for Vision Transformer models.
+*   **`dene.py`**: Implements a custom DeepFake detection pipeline using DenseNet, Stockwell Transform, Wavelet features, and SVM.
+*   **`dene2.py`**: Streamlit application for the `dene.py` model.
+*   **`final_test2.py`**: Streamlit application for a Swin Transformer based detector.
+*   **`ensemble_model.py`**: Trains an ensemble layer on top of outputs from multiple pretrained models.
+*   **`paper_train.py`**: Implements a pairwise interaction model, likely based on a research paper, using contrastive and classification losses.
+*   **`test_all_models.py`**: Script for evaluating the robustness of different models against various image perturbations.
+*   **`dene_comparison.py`**: Compares the performance of the `dene` model against other standard models.
+*   **`transformations_visalize_delete.py`**: Utility to visualize the effect of image perturbations.
 
-**Example:**
-```bash
-python test.py \
-    --model xception \
-    --weights_path ./checkpoints/xception_best.pth \
-    --dataset_path ./datasets/celeb-df/ \
-    --frames 30 \
-    --batch_size 32
-```
+## Notes
 
-## Results
-
-Our most comprehensive results come from the cross-dataset evaluation, where models were trained on FaceForensics++ and tested on Celeb-DF. The ROC AUC Score is the most reliable metric due to class imbalance.
-
-| Model                  | Test Accuracy (%) | ROC AUC Score  |
-| ---------------------- | ----------------- | -------------- |
-| 3D ResNet              | 81.16             | 0.7923         |
-| Xception               | 71.88             | 0.8041         |
-| 3D ResNet + Transformer| 79.02             | 0.7521         |
-| Xception + Transformer | 63.90             | 0.7489         |
-| ViT-16                 | 78.49             | 0.8512         |
-| ConvNeXt-S             | 76.92             | 0.8255         |
-| **Swin-S**             | **78.35**         | **0.8533**     |
-
-As shown, the **Swin-S Transformer** achieved the best generalization performance.
-
-## Future Work
-
-*   **Improve 3D CNNs:** Re-evaluate 3D CNNs with the expanded 30-frame dataset to better leverage temporal information.
-*   **Integrate Advanced Temporal Models:** Explore architectures like Fully Temporal Convolutional Networks (FTCNs).
-*   **Enhance Robustness:** Focus on targeted data augmentation techniques to improve model resilience against perturbations and enhance generalization.
-*   **Expand Dataset Diversity:** Train and test on a wider variety of deepfake datasets to build a more universal detector.
-
-## Contributing
-
-Contributions are welcome! If you have suggestions or improvements, please feel free to open an issue or submit a pull request.
-
-1.  Fork the Project
-2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the Branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
-
-## License
-
-This project is distributed under the MIT License. See `LICENSE` for more information.
+*   Many scripts have hardcoded paths and parameters. You will need to adjust these according to your setup and specific experiments.
+*   The project seems to be a research testbed, so some scripts might be experimental or specific to certain explorations.
+*   Ensure your GPU has enough VRAM for training larger models, especially 3D CNNs and Transformers.
