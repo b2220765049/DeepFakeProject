@@ -50,8 +50,8 @@ Ensure your datasets are structured appropriately for the `FDataset`, `FDataset_
 
 1.  **Clone the repository:**
     ```bash
-    git clone <your-repository-url>
-    cd <your-repository-name>
+    git clone github.com/b2220765049/DeepFakeProject
+    cd DeepFakeProject
     ```
 
 2.  **Create a Python environment:**
@@ -131,12 +131,12 @@ python test_all_models.py # Evaluates multiple models against various image pert
 *   **`swin_*.py` files (`swin_temporal.py`, `swin_frequency.py`, `swin_mix_style.py`, `swin_plus_train.py`):** Scripts for training Swin Transformer models with various modifications (temporal, frequency domain input, MixStyle augmentation, DRFM module).
 *   **`transformer_train.py`, `transformer_test.py`**: Training and testing for ResNet3D + Transformer architecture.
 *   **`transformer_xception_train.py`, `transformer_xception_test.py`**: Training and testing for Xception + Transformer architecture.
-*   **`vmamba_train.py` (likely ViT/Vision Mamba related), `last_eval.py`**: Training and evaluation for Vision Transformer models.
+*   **`vmamba_train.py`, `last_eval.py`**: Training and evaluation for Vision Transformer models.
 *   **`dene.py`**: Implements a custom DeepFake detection pipeline using DenseNet, Stockwell Transform, Wavelet features, and SVM.
 *   **`dene2.py`**: Streamlit application for the `dene.py` model.
 *   **`final_test2.py`**: Streamlit application for a Swin Transformer based detector.
 *   **`ensemble_model.py`**: Trains an ensemble layer on top of outputs from multiple pretrained models.
-*   **`paper_train.py`**: Implements a pairwise interaction model, likely based on a research paper, using contrastive and classification losses.
+*   **`paper_train.py`**: Implements a pairwise interaction model, based on a research paper, using contrastive and classification losses.
 *   **`test_all_models.py`**: Script for evaluating the robustness of different models against various image perturbations.
 *   **`dene_comparison.py`**: Compares the performance of the `dene` model against other standard models.
 *   **`transformations_visalize_delete.py`**: Utility to visualize the effect of image perturbations.
@@ -144,5 +144,5 @@ python test_all_models.py # Evaluates multiple models against various image pert
 ## Notes
 
 *   Many scripts have hardcoded paths and parameters. You will need to adjust these according to your setup and specific experiments.
-*   The project seems to be a research testbed, so some scripts might be experimental or specific to certain explorations.
+*   The project is research testbed, so some scripts might be experimental or specific to certain explorations.
 *   Ensure your GPU has enough VRAM for training larger models, especially 3D CNNs and Transformers.
